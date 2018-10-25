@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {View, Text, FlatList, StyleSheet, Image, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 
 import {listCategories} from '../reducers/categories';
@@ -13,6 +13,7 @@ class CategoryList extends React.Component {
 			refreshing: false
 		};
 	}
+
 	componentDidMount() {
 		this.props.listCategories();
 	}
@@ -25,13 +26,22 @@ class CategoryList extends React.Component {
 		this.props.listCategories().then(() => {
 			this.setState({
 				refreshing: false,
-			})
+			});
 		});
 	}
 
 	renderItem({item}) {
+		const imageStyle = {
+			backgroundColor: 'orange'
+		}
+
+		if (item.category_image) {
+			imageStyle.uri = item.category_image;
+		}
+
 		return (
 			<View style={styles.item}>
+				<Image source={imageStyle} style={styles.itemImage}/>
 				<Text>{item.category_name}</Text>
 			</View>
 		)
@@ -70,9 +80,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	item: {
+		flexDirection: 'row',
+		alignItems: 'center',
 		padding: 16,
 		marginBottom: 10,
-		backgroundColor: '#ccc'
+		backgroundColor: '#ccc',
+	},
+	itemImage: {
+		height: 100,
+		width: 100,
 	}
 });
 
