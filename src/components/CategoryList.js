@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, FlatList, StyleSheet, Image, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 
+import sorter from '../helpers/sorter';
+
 import {listCategories} from '../reducers/categories';
 import Loading from './Loading';
 
@@ -27,6 +29,12 @@ class CategoryList extends React.Component {
 			this.setState({
 				refreshing: false,
 			});
+		});
+	}
+
+	sortItems(items, key) {
+		return items.sort((a, b) => {
+			return a[key] > b[key];
 		});
 	}
 
@@ -61,7 +69,7 @@ class CategoryList extends React.Component {
 		return (
 			<FlatList
 				style={styles.container}
-				data={categories}
+				data={sorter(categories, 'category_name')}
 				renderItem={this.renderItem}
 				refreshControl={
 					<RefreshControl
